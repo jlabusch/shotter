@@ -1,0 +1,71 @@
+--- node_modules/webshot/lib/webshot.phantom.js	2013-04-12 07:09:57.000000000 +1200
++++ node_modules/webshot/lib/webshot.phantom.js	2013-04-20 23:37:12.066409820 +1200
+@@ -86,19 +86,49 @@
+     , height: pixelCount('height', args.shotHeight)
+     };
+ 
+-    // Execute the user's script
+-    page.evaluate(eval('('+args.script+')'));
++    var autoCleanup = args.takeShotOnCallback === 'true';
++    var code = eval('(' + args.script + ')');
++    var one_script = typeof(code) === 'function';
+ 
+-    if(args.takeShotOnCallback == 'true') {
+-      
+-      page.onCallback = function(data) {
+-        if(data == 'takeShot') {
+-          renderCleanUpExit();
++    page.onCallback = function(data){
++      if (data === 'takeShot'){
++        renderCleanUpExit();
++      }else if (one_script === false && data === 'next'){
++        setTimeout(runNextScript, 50);
++      }
++    };
++
++    // If there's only one function, evaluate it and move on
++    if (one_script){
++      page.evaluate(code);
++      if (autoCleanup){
++        renderCleanUpExit();
++      }
++    }else if (typeof(code) === typeof([])){
++      // For a list of functions, chop them off one at a time and execute
++      // with runNextScript(). Each function signals that it's finished by
++      // triggering onCallback with 'next' or (finally) 'takeShot'.
++      //
++      // Inspired by http://stackoverflow.com/questions/9246438/how-to-submit-a-form-using-phantomjs
++      var loadingPage = false;
++      function runNextScript(){
++        if (loadingPage){
++          setTimeout(runNextScript, 50);
++        }else{
++          if (code.length > 0){
++            page.evaluate(code.shift());
++          }else{
++            if (autoCleanup){
++              renderCleanUpExit();
++            }
++          }
+         }
+-      };
+-      
+-    } else {
+-      renderCleanUpExit();
++      }
++      page.onConsoleMessage = function(m){ console.log(m); };
++      page.onLoadStarted    = function(){ loadingPage = true;  console.log('load started'); };
++      page.onLoadFinished   = function(){ loadingPage = false; console.log('load finished'); };
++
++      runNextScript();
+     }
+ 
+   }, args.renderDelay);
+@@ -111,7 +141,6 @@
+       console.log(page.renderBase64(args.streamType));
+     }
+ 
+-    page.close();
+     phantom.exit(0);
+   }
+   

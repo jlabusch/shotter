@@ -1,0 +1,13 @@
+{
+  "name": "shotter",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "should": ">= 1.2.2",
+    "mocha": ">= 1.8.2",
+    "express": ">= 3.1.0",
+    "posix-getopt": ">= 1.0.0",
+    "webshot": "0.3.2",
+    "underscore": ">= 1.4.3"
+  }
+}
