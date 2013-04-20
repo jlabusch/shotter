@@ -26,7 +26,13 @@ Custom scripts in `shotter` expose the node-webshot `script` option, which in tu
 
 Scripts can either be a single function that takes no arguments and invokes `window.callPhantom("takeShot")` on completion or a list of functions that trigger `window.callPhantom("next")` after each step and finishing with `window.callPhantom("takeShot")`.
 
-Look at the included `cma.js` as an example:
+For a trivial example, look at `default_script.js`
+
+```javascript
+function(){ window.callPhantom('takeShot'); }
+```
+
+That script is the default action taken for no other scripts are specified. On the other hand, `cma.js` shows a more complex interaction:
 
 ```javascript
 [
