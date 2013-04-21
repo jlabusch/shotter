@@ -8,9 +8,9 @@ Web page screenshotting tool built on node-webshot and phantomjs.
 
 # Options
 
-  * **--output**: Name of output image file
-  * **--script**: Custom script to be executed on the browser
-  * **--width**: Virtual screen width
+  * **--output**: Name of output image file (Default: `screenshot_<timestamp>.jpg`)
+  * **--script**: Custom script to be executed in the browser (Default: `default_script.js`)
+  * **--width**: Virtual screen width (Default: 1024)
 
 # Custom scripts
 
@@ -24,7 +24,7 @@ Custom scripts in `shotter` expose the node-webshot `script` option, which in tu
 
 ## How?
 
-Scripts can either be a single function that takes no arguments and invokes `window.callPhantom("takeShot")` on completion or a list of functions that trigger `window.callPhantom("next")` after each step and finishing with `window.callPhantom("takeShot")`.
+Scripts can either be a single function that takes no arguments and invokes `window.callPhantom("takeShot")` on completion, or a list of functions that trigger `window.callPhantom("next")` after each step and finish with `window.callPhantom("takeShot")`.
 
 For a trivial example, look at `default_script.js`
 
@@ -32,7 +32,7 @@ For a trivial example, look at `default_script.js`
 function(){ window.callPhantom('takeShot'); }
 ```
 
-That script is the default action taken for no other scripts are specified. On the other hand, `cma.js` shows a more complex interaction:
+That script is the default action taken if no other scripts are specified. On the other hand, `cma.js` shows a more complex interaction:
 
 ```javascript
 [
@@ -65,7 +65,7 @@ That script is the default action taken for no other scripts are specified. On t
 ]
 ```
 
-# License
+# BSD License
 
 GPLv3 - http://www.gnu.org/licenses/gpl-3.0.txt
 
