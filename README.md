@@ -64,3 +64,8 @@ That script is the default action taken for no other scripts are specified. On t
     }
 ]
 ```
+
+# License
+
+GPLv3 - http://www.gnu.org/licenses/gpl-3.0.txt
+
