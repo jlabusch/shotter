@@ -65,7 +65,7 @@ That script is the default action taken if no other scripts are specified. On th
 ]
 ```
 
-# BSD License
+# License
 
 GPLv3 - http://www.gnu.org/licenses/gpl-3.0.txt
 
